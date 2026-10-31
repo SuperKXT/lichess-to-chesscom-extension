@@ -32,7 +32,10 @@ export default defineConfig({
               // `data_collection_permissions` needs 140 on desktop and 142
               // on Android; below that, AMO's linter warns on every upload.
               strict_min_version: '142.0',
-              data_collection_permissions: { required: ['none'] },
+              // The game's PGN leaves the browser in the Chess.com URL. That is
+              // website content, sent on one click and eligible for implicit
+              // consent under Add-on Policies §6.2.2.2.
+              data_collection_permissions: { required: ['websiteContent'] },
             },
           },
         }
