@@ -1,0 +1,5 @@
+.output/
+.wxt/
+pnpm-lock.yaml
+# Dated research captures: kept as written.
+docs/research/
