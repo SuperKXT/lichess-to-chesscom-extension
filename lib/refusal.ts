@@ -26,6 +26,9 @@ export type ExportError = 'network' | 'rate-limited' | 'unexpected';
 // anything about Chess.com, which rejects such a URL; the rest of its
 // behaviour for these cases is untested.
 
+/** Shown while the game is being exported from Lichess. */
+export const fetchingMessage = 'Fetching the game from Lichess…';
+
 export function refusalMessage(refusal: Refusal): string {
   if (refusal.reason !== 'variant') return plainMessages[refusal.reason];
   const name =

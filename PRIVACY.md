@@ -31,7 +31,6 @@ Opening the game on Chess.com's analysis board saves nothing there. If you then 
 | ----------------------- | --------------------------------------------------------------------------------------------- |
 | `https://lichess.org/*` | To tell whether the current lichess.org page is a game, and to export that game from Lichess. |
 | `activeTab`             | To read the address of the current tab, only at the moment you click the toolbar button.      |
-| `contextMenus`          | To add the extension's entry to the right-click menu on links to Lichess games.               |
 
 ## Changes and contact
 

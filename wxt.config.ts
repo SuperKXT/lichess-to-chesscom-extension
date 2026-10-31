@@ -18,12 +18,11 @@ export default defineConfig({
     name: 'Lichess to Chess.com Review',
     description:
       "Open a finished Lichess game on Chess.com's analysis board, ready for Game Review. Not affiliated with Lichess or Chess.com.",
-    permissions: ['activeTab', 'contextMenus'],
+    permissions: ['activeTab'],
     host_permissions: ['https://lichess.org/*'],
     ...(browser === 'firefox'
       ? {
           action: {
-            default_title: 'Open on Chess.com for Game Review',
             default_icon: actionIcon,
           },
           browser_specific_settings: {
@@ -41,7 +40,6 @@ export default defineConfig({
         }
       : {
           action: {
-            default_title: 'Open on Chess.com for Game Review',
             default_icon: actionIcon,
             default_state: 'disabled',
           },

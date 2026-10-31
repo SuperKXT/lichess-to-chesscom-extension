@@ -36,7 +36,7 @@ The clause text is confirmed. How it applies to this extension is our judgment, 
 
 ## Consequences
 
-- The permission set is `activeTab`, `contextMenus` and `https://lichess.org/*`, with nothing on `chess.com`. A Chess.com host permission is the clearest sign that this ADR is being broken. Adding one means superseding this ADR, not editing a manifest.
+- The permission set is `activeTab` and `https://lichess.org/*`, with nothing on `chess.com`. A Chess.com host permission is the clearest sign that this ADR is being broken. Adding one means superseding this ADR, not editing a manifest.
 - The destination's "in one click" is reworded to match the boundary: one click lands the game on Chess.com's analysis board, ready for Review.
 - The import seam can only fail silently from the extension's point of view. Detecting breakage happens outside the running extension (maintenance posture, still unspecified).
 - The extension never causes a PGN to be published on Chess.com. A public persisted analysis appears only when the user clicks Review, and Chess.com creates it. The privacy policy can say exactly that.

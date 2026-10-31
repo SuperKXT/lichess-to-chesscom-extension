@@ -25,7 +25,7 @@ Not affiliated with Lichess or Chess.com.
 Played a game on Lichess and want Chess.com's Game Review on it? This extension opens the finished game on Chess.com's analysis board, ready to review.
 
 HOW IT WORKS
-1. On lichess.org, open a finished game and click the extension's toolbar button. Or right-click a link to a Lichess game and choose the extension's entry.
+1. On lichess.org, open a finished game and click the extension's toolbar button.
 2. The extension exports the game from Lichess and opens it on Chess.com's analysis board.
 3. Click Review on Chess.com to start Game Review.
 
@@ -59,7 +59,6 @@ Open source (MIT): https://github.com/SuperKXT/lichess-to-chesscom-extension
 **Permission justifications**:
 
 - **`activeTab`**: Reads the address of the current tab only when the user clicks the toolbar button, to find which Lichess game to open.
-- **`contextMenus`**: Adds one right-click entry on links to Lichess games, so the user can open a linked game without visiting it first.
 - **Host permission `https://lichess.org/*`**: Exports the chosen game's PGN from Lichess's public export endpoint (`https://lichess.org/game/export/<id>`), and tells whether the current lichess.org page is a game so the toolbar button can explain when it isn't. The extension has no access to any other site.
 
 **Remote code**: No. All code is in the package.
