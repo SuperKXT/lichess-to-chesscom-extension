@@ -42,10 +42,12 @@ jobs:
       - uses: ./.github/actions/setup
       # The Chrome zip, the Firefox zip and the AMO sources zip.
       - run: pnpm zip
+      # upload-artifact skips hidden paths, and `.output/` is one.
+      - run: mkdir packages && mv .output/*.zip packages/
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: packages
-          path: .output/*.zip
+          path: packages/*.zip
           if-no-files-found: error
 
   # Rebuilds the Firefox package from the sources zip, the way AMO's reviewers
