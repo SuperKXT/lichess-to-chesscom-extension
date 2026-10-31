@@ -14,6 +14,7 @@ import {
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import process from 'node:process';
+import { crc32, deflateSync } from 'node:zlib';
 
 const root = join(import.meta.dirname, '..');
 const dataUri = (svg) =>
@@ -28,7 +29,11 @@ const tile = dataUri(
   ),
 );
 
-/** `artwork` smaller than `width` centres the source in transparent padding. */
+/**
+ * `artwork` smaller than `width` centres the source in transparent padding.
+ * `opaque` writes a 24-bit PNG: the Chrome Web Store rejects promo tiles and
+ * screenshots that carry an alpha channel, even a fully opaque one.
+ */
 const outputs = [
   ...[16, 24, 32, 48, 64, 128].map((size) => ({
     file: `public/icon/${size}.png`,
@@ -51,12 +56,43 @@ const outputs = [
     width: 440,
     height: 280,
     artwork: 440,
+    opaque: true,
   },
 ];
 
+/** Canvas can only write RGBA PNGs, so opaque outputs are encoded here. */
+const rgbPng = (width, height, rgba) => {
+  const chunk = (type, data) => {
+    const body = Buffer.concat([Buffer.from(type, 'latin1'), data]);
+    const length = Buffer.alloc(4);
+    length.writeUInt32BE(data.length);
+    const crc = Buffer.alloc(4);
+    crc.writeUInt32BE(crc32(body));
+    return Buffer.concat([length, body, crc]);
+  };
+  const header = Buffer.alloc(13);
+  header.writeUInt32BE(width, 0);
+  header.writeUInt32BE(height, 4);
+  header.set([8, 2, 0, 0, 0], 8); // 8-bit, truecolour, no interlace
+  // Each scanline is a filter byte (0, none) then its RGB triples.
+  const rows = Buffer.alloc(height * (1 + width * 3));
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const from = (y * width + x) * 4;
+      rows.set(rgba.subarray(from, from + 3), y * (1 + width * 3) + 1 + x * 3);
+    }
+  }
+  return Buffer.concat([
+    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
+    chunk('IHDR', header),
+    chunk('IDAT', deflateSync(rows, { level: 9 })),
+    chunk('IEND', Buffer.alloc(0)),
+  ]);
+};
+
 const page = `<!doctype html><body><script>
   const outputs = ${JSON.stringify(outputs)};
-  Promise.all(outputs.map(async ({ file, src, width, height, artwork }) => {
+  Promise.all(outputs.map(async ({ file, src, width, height, artwork, opaque }) => {
     const img = new Image();
     img.src = src;
     await img.decode();
@@ -65,8 +101,13 @@ const page = `<!doctype html><body><script>
     canvas.height = height;
     const scale = artwork / width;
     const [x, y] = [(width - artwork) / 2, (height - height * scale) / 2];
-    canvas.getContext('2d').drawImage(img, x, y, artwork, height * scale);
-    return { file, png: canvas.toDataURL('image/png') };
+    const context = canvas.getContext('2d');
+    context.drawImage(img, x, y, artwork, height * scale);
+    if (!opaque) return { file, png: canvas.toDataURL('image/png') };
+    const { data } = context.getImageData(0, 0, width, height);
+    let binary = '';
+    for (const byte of data) binary += String.fromCharCode(byte);
+    return { file, width, height, rgba: btoa(binary) };
   })).then((pngs) => {
     const pre = document.createElement('pre');
     pre.id = 'out';
@@ -92,10 +133,15 @@ try {
   );
   const json = /<pre id="out">(.*?)<\/pre>/s.exec(dom)?.[1];
   if (json === undefined) throw new Error('Chrome produced no icons');
-  for (const { file, png } of JSON.parse(json)) {
+  for (const { file, png, width, height, rgba } of JSON.parse(json)) {
     const path = join(root, file);
     mkdirSync(join(path, '..'), { recursive: true });
-    writeFileSync(path, Buffer.from(png.split(',')[1], 'base64'));
+    writeFileSync(
+      path,
+      png === undefined
+        ? rgbPng(width, height, Buffer.from(rgba, 'base64'))
+        : Buffer.from(png.split(',')[1], 'base64'),
+    );
     console.log(file);
   }
 } finally {
