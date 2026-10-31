@@ -17,6 +17,7 @@ pnpm zip            # store zips, plus the AMO sources zip
 pnpm lint           # ESLint, Prettier and web-ext lint
 pnpm typecheck
 pnpm test
+pnpm e2e             # Chromium smoke test (first: pnpm exec playwright install chromium)
 pnpm icons          # re-export the icon PNGs from branding/icon.svg (needs Chrome)
 ```
 
@@ -37,6 +38,28 @@ pnpm build:firefox
 ```
 
 The built extension is in `.output/firefox-mv3/`, and it is identical to the contents of the submitted Firefox zip. Release packages are built in CI on Node 24.14.0, never on a developer machine.
+
+## CI and releases
+
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs on every push and pull request:
+
+- **check**: typecheck, lint (including `web-ext lint`, the addons-linter that AMO's validation runs) and unit tests.
+- **smoke**: loads the built Chrome extension in Playwright's Chromium and checks that the background starts.
+- **package**: builds the Chrome zip, Firefox zip and sources zip on Node 24.14.0.
+- **reproducibility**: on arm64, rebuilds the Firefox package from the sources zip using only the commands in "Building from source", and fails on any difference.
+
+**Firefox has no automated end-to-end test.** Playwright cannot load extensions into Firefox. Firefox is covered by `web-ext lint`, the reproducibility job and a manual check before each release.
+
+To release, bump `version` in `package.json` and push a matching `v<version>` tag. When every job is green, CI attaches the three zips to a GitHub release, then submits them to each store whose listing already exists:
+
+| Store            | Enabled by repository variable      | Secrets in the `stores` environment                                           |
+| ---------------- | ----------------------------------- | ----------------------------------------------------------------------------- |
+| Chrome Web Store | `CHROME_EXTENSION_ID` (the item id) | `CWS_PUBLISHER_ID`, `CWS_CLIENT_ID`, `CWS_CLIENT_SECRET`, `CWS_REFRESH_TOKEN` |
+| Firefox Add-ons  | `AMO_LISTED=true`                   | `AMO_JWT_ISSUER`, `AMO_JWT_SECRET`                                            |
+
+CI never makes a first submission. The Chrome Web Store API cannot create an item. `web-ext sign` _would_ create a new AMO listing for an unknown GUID, so [`scripts/check-amo-listing.js`](scripts/check-amo-listing.js) refuses to sign unless the GUID already belongs to these credentials. Make each store's first submission by hand from the release zips, then set its variable.
+
+The AMO key is account-wide, never expires and cannot be scoped. Keep it only in the `stores` environment, and restrict that environment to `v*` tags.
 
 ## Version pins
 

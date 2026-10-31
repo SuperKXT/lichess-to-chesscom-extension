@@ -1,5 +1,7 @@
 .output/
 .wxt/
 pnpm-lock.yaml
+test-results/
+playwright-report/
 # Dated research captures: kept as written.
 docs/research/

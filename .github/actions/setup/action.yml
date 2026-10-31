@@ -1,0 +1,15 @@
+name: Set up the toolchain
+description: >-
+  Node 24.14.0 and pnpm 12.16.1, installed exactly as the README's "Building
+  from source" section does, then a frozen install.
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      with:
+        # Release artifacts are built on the Node that AMO's reviewers use.
+        node-version: 24.14.0
+    - run: npm install -g pnpm@12.16.1
+      shell: bash
+    - run: pnpm install --frozen-lockfile
+      shell: bash
