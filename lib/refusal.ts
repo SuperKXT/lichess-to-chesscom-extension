@@ -16,13 +16,15 @@ export type PlainReason =
   | 'broadcast'
   | 'ongoing'
   | 'aborted'
-  | 'from-position';
+  | 'from-position'
+  | 'too-long';
 
 /** Something went wrong reaching Lichess. Unlike a refusal, retrying may help. */
 export type ExportError = 'network' | 'rate-limited' | 'unexpected';
 
-// Every string the user can be shown lives below. None claims anything about
-// Chess.com, whose behaviour for these cases is untested.
+// Every string the user can be shown lives below. Only `too-long` claims
+// anything about Chess.com, which rejects such a URL; the rest of its
+// behaviour for these cases is untested.
 
 export function refusalMessage(refusal: Refusal): string {
   if (refusal.reason !== 'variant') return plainMessages[refusal.reason];
@@ -50,6 +52,7 @@ const plainMessages: Readonly<Record<PlainReason, string>> = {
   ongoing: 'This game is still being played. Try again once it has finished.',
   aborted: "This game was aborted, so there's nothing to review.",
   'from-position': "Games started from a custom position aren't supported yet.",
+  'too-long': 'This game is too long to open on Chess.com.',
 };
 
 const variantNames: Readonly<Record<Variant, string>> = {

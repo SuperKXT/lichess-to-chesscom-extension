@@ -36,6 +36,7 @@ describe('refusalMessage', () => {
       'from-position',
       "Games started from a custom position aren't supported yet.",
     ],
+    ['too-long', 'This game is too long to open on Chess.com.'],
   ] as const)('explains %s', (reason, message) => {
     expect(refusalMessage({ reason })).toBe(message);
   });
