@@ -16,6 +16,12 @@ _Avoid_: game id (when 12 characters are meant), player link
 Getting a game's PGN out of Lichess.
 _Avoid_: download, fetch, scrape
 
+## The extension
+
+**Refusal**:
+The extension's explicit statement to the user that it will not open the current page or link, and why. A refusal is a designed outcome, never silence and never an error.
+_Avoid_: error, failure, unsupported
+
 ## Chess.com side
 
 **Import**:
