@@ -19,6 +19,24 @@ pnpm typecheck
 pnpm test
 ```
 
+## Building from source
+
+These are the instructions for Mozilla's source-code review. They rebuild the Firefox package byte-for-byte from the sources zip.
+
+- **OS**: Ubuntu 24.04 LTS, on any architecture.
+- **Node**: 24.14.0 with its bundled npm 11.9.0 (<https://nodejs.org/dist/v24.14.0/>).
+- **pnpm**: 12.16.1 (<https://pnpm.io>). This is the only tool beyond the stock Node install.
+
+From the root of the extracted sources zip:
+
+```sh
+npm install -g pnpm@12.16.1
+pnpm install --frozen-lockfile
+pnpm build:firefox
+```
+
+The built extension is in `.output/firefox-mv3/`, and it is identical to the contents of the submitted Firefox zip. Release packages are built in CI on Node 24.14.0, never on a developer machine.
+
 ## Version pins
 
 - **TypeScript is pinned to `~6.0.3`. Do not upgrade it to 7.** typescript-eslint 8 supports `typescript >=4.8.4 <6.1.0`, and the type-aware lint rules are worth more here than the newer compiler. Lift the pin once typescript-eslint supports TypeScript 7.

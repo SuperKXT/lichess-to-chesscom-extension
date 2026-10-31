@@ -3,6 +3,8 @@ import { defineConfig } from 'wxt';
 export default defineConfig({
   // Explicit imports over auto-imports: every module says what it depends on.
   imports: false,
+  // AMO reviewers rebuild from the sources zip; prose only widens what they read.
+  zip: { excludeSources: ['docs/**'] },
   manifest: ({ browser }) => ({
     name: 'Lichess to Chess.com Review',
     description:
