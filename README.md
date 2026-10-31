@@ -17,6 +17,7 @@ pnpm zip            # store zips, plus the AMO sources zip
 pnpm lint           # ESLint, Prettier and web-ext lint
 pnpm typecheck
 pnpm test
+pnpm icons          # re-export the icon PNGs from branding/icon.svg (needs Chrome)
 ```
 
 ## Building from source

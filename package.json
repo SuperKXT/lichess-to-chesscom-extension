@@ -21,7 +21,8 @@
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "postinstall": "wxt prepare"
+    "postinstall": "wxt prepare",
+    "icons": "node scripts/export-icons.js"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

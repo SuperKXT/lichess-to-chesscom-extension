@@ -1,5 +1,14 @@
 import { defineConfig } from 'wxt';
 
+// `manifest.icons` is discovered from public/icon/; the toolbar icon is not.
+// Chrome draws the action at 16/24/32, Firefox at 16/32 with 64 for 2x.
+const actionIcon = {
+  16: 'icon/16.png',
+  24: 'icon/24.png',
+  32: 'icon/32.png',
+  64: 'icon/64.png',
+};
+
 export default defineConfig({
   // Explicit imports over auto-imports: every module says what it depends on.
   imports: false,
@@ -13,7 +22,10 @@ export default defineConfig({
     host_permissions: ['https://lichess.org/*'],
     ...(browser === 'firefox'
       ? {
-          action: { default_title: 'Open on Chess.com for Game Review' },
+          action: {
+            default_title: 'Open on Chess.com for Game Review',
+            default_icon: actionIcon,
+          },
           browser_specific_settings: {
             gecko: {
               id: 'lichess-to-chesscom-review@superkxt',
@@ -27,6 +39,7 @@ export default defineConfig({
       : {
           action: {
             default_title: 'Open on Chess.com for Game Review',
+            default_icon: actionIcon,
             default_state: 'disabled',
           },
           // 148 exposes `browser.*` natively, so no `browser ??= chrome` shim.

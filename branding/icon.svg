@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Master for every icon PNG; regenerate with `pnpm icons`. -->
+  <!-- A 2x2 board square: white, Lichess black (bottom-left), Chess.com green (top-right). -->
+  <path d="M30 4 H64 V64 H4 V30 A26 26 0 0 1 30 4 Z" fill="#fff" />
+  <path d="M64 4 H98 A26 26 0 0 1 124 30 V64 H64 Z" fill="#81b64c" />
+  <path d="M4 64 H64 V124 H30 A26 26 0 0 1 4 98 Z" fill="#161512" />
+  <path d="M64 64 H124 V98 A26 26 0 0 1 98 124 H64 Z" fill="#fff" />
+  <!-- The ring keeps the white squares' edge on a light toolbar. -->
+  <rect x="5.5" y="5.5" width="117" height="117" rx="24.5" fill="none" stroke="#161512" stroke-width="7" />
+  <!-- Gold arrow, black square to green square. -->
+  <path
+    d="M28 52 H72 V32 L104 64 L72 96 V76 H28 Z"
+    transform="rotate(-45 64 64)"
+    fill="#f5a524"
+    stroke="#161512"
+    stroke-width="5"
+    stroke-linejoin="round"
+  />
+</svg>
