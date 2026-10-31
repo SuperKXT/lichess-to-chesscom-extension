@@ -4,6 +4,8 @@ A browser extension for Chrome and Firefox that opens the finished Lichess game 
 
 Not affiliated with Lichess or Chess.com.
 
+This extension was developed with AI agents (Claude Code), directed and reviewed by its maintainer.
+
 ## Development
 
 Requires Node 24.14 or later (`.nvmrc` pins 26, the current LTS) and pnpm 12.
