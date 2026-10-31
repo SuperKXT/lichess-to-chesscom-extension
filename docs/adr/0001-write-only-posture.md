@@ -8,7 +8,7 @@ The extension never reads or modifies Chess.com. Its only contact with Chess.com
 
 ## Context
 
-Chess.com has no write API: the PubAPI is "a read-only REST API", and "You cannot send game-moves or other commands to Chess.com from this system." The undocumented `?pgn=` parameter and `POST /analysis` are the only ways in. See `docs/research/chesscom-import-surfaces.md` §4 and §6 on branch `research/mechanisms-and-stack`.
+Chess.com has no write API: the PubAPI is "a read-only REST API", and "You cannot send game-moves or other commands to Chess.com from this system." The undocumented `?pgn=` parameter and `POST /analysis` are the only ways in. See `docs/research/chesscom-import-surfaces.md`, §4 and §6.
 
 The [User Agreement](https://www.chess.com/legal/user-agreement) prohibits, verbatim:
 
