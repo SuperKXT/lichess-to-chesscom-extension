@@ -85,8 +85,7 @@ export function assessExport({ status, body }: ExportResponse): Assessment {
   if (status !== 200 || !isExportedGame(body)) {
     return { kind: 'error', error: 'unexpected' };
   }
-  const refusal =
-    unfinished.get(body.status) ?? variantRefusal(body.variant.key);
+  const refusal = unfinished.get(body.status) ?? variantRefusal(body.variant);
   if (refusal !== undefined) return { kind: 'refused', ...refusal };
   return { kind: 'ready', pgn: body.pgn };
 }
@@ -95,7 +94,8 @@ export function assessExport({ status, body }: ExportResponse): Assessment {
 interface ExportedGame {
   pgn: string;
   status: string;
-  variant: { key: string };
+  /** A bare key such as `standard`, not an object. */
+  variant: string;
 }
 
 function isExportedGame(body: unknown): body is ExportedGame {
@@ -104,10 +104,7 @@ function isExportedGame(body: unknown): body is ExportedGame {
   return (
     typeof game.pgn === 'string' &&
     typeof game.status === 'string' &&
-    typeof game.variant === 'object' &&
-    game.variant !== null &&
-    'key' in game.variant &&
-    typeof game.variant.key === 'string'
+    typeof game.variant === 'string'
   );
 }
 

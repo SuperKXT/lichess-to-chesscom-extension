@@ -95,7 +95,8 @@ describe('classifyLichessUrl', () => {
 describe('assessExport', () => {
   const pgn =
     '[Event "Rated blitz game"]\n\n1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7# 1-0\n';
-  const finished = { status: 'mate', variant: { key: 'standard' }, pgn };
+  // The shape `/game/export/<id>` sends as JSON: `variant` is a bare key.
+  const finished = { status: 'mate', variant: 'standard', pgn };
 
   it('hands over the PGN of a finished standard game', () => {
     expect(assessExport({ status: 200, body: finished })).toEqual({
@@ -119,7 +120,7 @@ describe('assessExport', () => {
     'refuses a %s game, naming the variant',
     (key) => {
       expect(
-        assessExport({ status: 200, body: { ...finished, variant: { key } } }),
+        assessExport({ status: 200, body: { ...finished, variant: key } }),
       ).toEqual({ kind: 'refused', reason: 'variant', variant: key });
     },
   );
@@ -128,7 +129,7 @@ describe('assessExport', () => {
     expect(
       assessExport({
         status: 200,
-        body: { ...finished, variant: { key: 'newVariant' } },
+        body: { ...finished, variant: 'newVariant' },
       }),
     ).toEqual({ kind: 'refused', reason: 'variant', variant: 'unknown' });
   });
@@ -137,7 +138,7 @@ describe('assessExport', () => {
     expect(
       assessExport({
         status: 200,
-        body: { ...finished, variant: { key: 'fromPosition' } },
+        body: { ...finished, variant: 'fromPosition' },
       }),
     ).toEqual({ kind: 'refused', reason: 'from-position' });
   });
@@ -155,7 +156,12 @@ describe('assessExport', () => {
     ['a null body', 'unexpected', 200, null],
     ['a missing pgn', 'unexpected', 200, { ...finished, pgn: undefined }],
     ['a numeric status', 'unexpected', 200, { ...finished, status: 7 }],
-    ['a flat variant', 'unexpected', 200, { ...finished, variant: 'standard' }],
+    [
+      'a variant object',
+      'unexpected',
+      200,
+      { ...finished, variant: { key: 'standard' } },
+    ],
   ])('reports %s as %s', (_, error, status, body) => {
     expect(assessExport({ status, body })).toEqual({ kind: 'error', error });
   });

@@ -4,7 +4,7 @@ import { openOnChessCom } from '../lib/open';
 
 const pgn =
   '[Event "Rated blitz game"]\n\n1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7# 1-0';
-const finished = { status: 'mate', variant: { key: 'standard' }, pgn };
+const finished = { status: 'mate', variant: 'standard', pgn };
 
 function answering(status: number, body: unknown = null) {
   return vi
