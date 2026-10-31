@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 280">
+  <!-- Chrome Web Store small promo tile; regenerate with `pnpm icons`. -->
+  <!-- Our icon and words only: no Lichess or Chess.com marks. -->
+  <!-- Light, because the icon's black square and ring vanish on dark. -->
+  <rect width="440" height="280" fill="#f2efe8" />
+  <image href="icon.svg" x="32" y="84" width="112" height="112" />
+  <g font-family="system-ui, sans-serif" fill="#161512" font-weight="700" font-size="27">
+    <text x="168" y="124">Lichess to</text>
+    <text x="168" y="158">Chess.com Review</text>
+  </g>
+  <text x="168" y="190" font-family="system-ui, sans-serif" font-size="16" fill="#55534e">
+    Finished game → Game Review
+  </text>
+</svg>
