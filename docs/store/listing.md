@@ -73,6 +73,7 @@ Open source (MIT): https://github.com/SuperKXT/lichess-to-chesscom-extension
 
 ## Firefox Add-ons
 
+- **Privacy policy**: paste the text of [PRIVACY.md](../../PRIVACY.md). AMO renders only a subset of Markdown: it drops headings with their text, shows tables as raw pipes and escapes `<`, even in inline code. Keep that file to bold, lists, links and inline code, so it reads the same on GitHub and AMO. AMO also turns every "Chess.com" into a link, which can't be switched off.
 - **Data collection**: the manifest declares `data_collection_permissions: { required: ["websiteContent"] }`. Under Add-on Policies §6.2.2.2 this is implicit consent, because the PGN is sent only as the direct result of one deliberate click, and only for the game the user acted on.
 - **License**: MIT.
 - **Before the first submission**, accept the updated distribution agreement that takes effect 2026-12-01 ([Diff the new AMO policies effective 2026-12-01](https://github.com/SuperKXT/lichess-to-chesscom-extension/issues/11)).
