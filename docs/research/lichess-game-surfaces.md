@@ -66,9 +66,15 @@ Spec: <https://lichess.org/api#tag/Games/operation/gamePgn>
 - **Rate limits: UNKNOWN numerically.** No `X-RateLimit-*` headers; no per-endpoint
   `RateLimit` in lila for `exportOne`. Only the generic policy applies (section 7).
 
-**Design consequence:** request `clocks=0&evals=0`. Lichess evals are irrelevant (the point
-is Chess.com's analysis) and clock annotations are what push a PGN past Chess.com's ~14 KB
-URL ceiling.
+**Design consequence:** request `clocks=true&evals=false`. Lichess evals are irrelevant (the
+point is Chess.com's analysis). Clock annotations roughly quadruple the encoded PGN and can
+push a long game past Chess.com's ~14 KB URL ceiling, so a game that does not fit with them
+is imported with the `[%clk]` comments stripped.
+
+_Update 2026-11-15, CONFIRMED live:_ Chess.com's analysis board reads `[%clk]` from a
+`?pgn=` import. It then shows both players' clocks and a time-spent bar on every move.
+Without `[%clk]` it shows neither, even with a `TimeControl` header. This is why clocks are
+requested despite the length cost.
 
 ## 3. Study and broadcast PGN — CONFIRMED
 

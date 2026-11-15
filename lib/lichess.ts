@@ -98,6 +98,15 @@ interface ExportedGame {
   variant: string;
 }
 
+/**
+ * `pgn` without the `[%clk]` comments Lichess exports with `clocks=true`, in
+ * the form Lichess exports with `clocks=false`. A black move's `1...` number
+ * exists only because a comment came before it, so it goes with the comment.
+ */
+export function withoutClocks(pgn: string): string {
+  return pgn.replaceAll(/ \{ \[%clk [\d:.]+\] \}(?: \d+\.\.\.)?/g, '');
+}
+
 function isExportedGame(body: unknown): body is ExportedGame {
   if (typeof body !== 'object' || body === null) return false;
   const game = body as Partial<Record<keyof ExportedGame, unknown>>;

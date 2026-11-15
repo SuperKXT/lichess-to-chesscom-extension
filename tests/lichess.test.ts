@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { assessExport, classifyLichessUrl } from '../lib/lichess';
+import {
+  assessExport,
+  classifyLichessUrl,
+  withoutClocks,
+} from '../lib/lichess';
 
 describe('classifyLichessUrl', () => {
   it('finds the game id on a game page', () => {
@@ -170,5 +174,25 @@ describe('assessExport', () => {
     expect(
       assessExport({ status: 200, body: { ...finished, status: 'newEnding' } }),
     ).toEqual({ kind: 'ready', pgn });
+  });
+});
+
+describe('withoutClocks', () => {
+  it('gives the PGN Lichess exports without clocks', () => {
+    const clocked =
+      '[Result "1-0"]\n\n1. e4 { [%clk 0:03:00] } 1... e5 { [%clk 0:03:00] } ' +
+      '2. Qh5 { [%clk 0:02:58.4] } 2... Nc6 { [%clk 0:02:59] } ' +
+      '3. Bc4 { [%clk 0:02:57] } 3... Nf6 { [%clk 0:02:55] } ' +
+      '4. Qxf7# { [%clk 0:02:56] } 1-0\n';
+
+    expect(withoutClocks(clocked)).toBe(
+      '[Result "1-0"]\n\n1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7# 1-0\n',
+    );
+  });
+
+  it('leaves a PGN without clocks unchanged', () => {
+    const pgn = '1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7# 1-0';
+
+    expect(withoutClocks(pgn)).toBe(pgn);
   });
 });
