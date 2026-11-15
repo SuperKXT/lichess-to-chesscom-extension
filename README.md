@@ -52,7 +52,7 @@ The built extension is in `.output/firefox-mv3/`, and it is identical to the con
 
 **Firefox has no automated end-to-end test.** Playwright cannot load extensions into Firefox. Firefox is covered by `web-ext lint`, the reproducibility job and a manual check before each release.
 
-To release, bump `version` in `package.json` and push a matching `v<version>` tag. When every job is green, CI attaches the three zips to a GitHub release, then submits them to each store whose listing already exists:
+To release, bump `version` in `package.json`, add the version's section to [`CHANGELOG.md`](CHANGELOG.md) in the same pull request, and push a matching `v<version>` tag once it is merged. CI fails while the version has no changelog section. When every job is green, CI attaches the three zips to a GitHub release with that section as its notes, then submits them to each store whose listing already exists. The Firefox submission carries the same section as its release notes. The Chrome Web Store has no field for them:
 
 | Store            | Enabled by repository variable      | Secrets in the `stores` environment                                           |
 | ---------------- | ----------------------------------- | ----------------------------------------------------------------------------- |
