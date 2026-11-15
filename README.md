@@ -8,7 +8,7 @@ This extension was developed with AI agents (Claude Code), directed and reviewed
 
 ## Development
 
-Requires Node 24.14.0 and pnpm 12.16.1, both pinned in `devEngines` in `package.json`.
+Requires Node 24.14.0 and pnpm 12.21.0, both pinned in `devEngines` in `package.json`.
 
 ```sh
 pnpm install
@@ -29,12 +29,12 @@ These are the instructions for Mozilla's source-code review. They rebuild the Fi
 
 - **OS**: Ubuntu 24.04 LTS, on any architecture.
 - **Node**: 24.14.0 with its bundled npm 11.9.0 (<https://nodejs.org/dist/v24.14.0/>).
-- **pnpm**: 12.16.1 (<https://pnpm.io>). This is the only tool beyond the stock Node install.
+- **pnpm**: 12.21.0 (<https://pnpm.io>). This is the only tool beyond the stock Node install.
 
 From the root of the extracted sources zip:
 
 ```sh
-npm install -g pnpm@12.16.1
+npm install -g pnpm@12.21.0
 pnpm install --frozen-lockfile
 pnpm build:firefox
 ```
