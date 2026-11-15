@@ -8,7 +8,7 @@ This extension was developed with AI agents (Claude Code), directed and reviewed
 
 ## Development
 
-Requires Node 24.14 or later (`.nvmrc` pins 26, the current LTS) and pnpm 12.
+Requires Node 24.14.0 and pnpm 12.16.1, both pinned in `devEngines` in `package.json`.
 
 ```sh
 pnpm install
@@ -68,4 +68,4 @@ The AMO key is account-wide, never expires and cannot be scoped. Keep it only in
 - **TypeScript is pinned to `~6.0.3`. Do not upgrade it to 7.** typescript-eslint 8 supports `typescript >=4.8.4 <6.1.0`, and the type-aware lint rules are worth more here than the newer compiler. Lift the pin once typescript-eslint supports TypeScript 7.
 - **Chrome 148 or later** (`minimum_chrome_version`). Chrome 148 is the first to expose `browser.*` natively, so the code uses it with no `browser ??= chrome` shim.
 - **Firefox 142 or later** (`strict_min_version`). `data_collection_permissions`, which AMO requires for new submissions, is supported from Firefox 140 on desktop and 142 on Android. AMO's linter warns on any lower floor.
-- **Node `>=24.14`** in `engines`, because AMO's reviewers rebuild the extension on Node 24.14.0.
+- **Node 24.14.0** in `devEngines`, because AMO's reviewers rebuild the extension on Node 24.14.0. Its `onFail` is `error`, so pnpm never downloads a different Node during their build. Keep the versions in "Building from source" and the CI reproducibility job in step with `devEngines`.
