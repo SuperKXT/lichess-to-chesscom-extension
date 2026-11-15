@@ -6,11 +6,11 @@ _Lichess to Chess.com Review_ is a browser extension for Chrome and Firefox. It 
 
 **What happens when you use it**
 
-The extension does nothing until you click its toolbar button on a Lichess page, or choose its entry on a link to a Lichess game. Then:
+The extension does nothing until you click its toolbar button on a Lichess page. Then:
 
-1. **It reads the address of that page or link** to find the game's 8-character public id. If the address contains a player's 12-character link, the extension uses only the first 8 characters, so the 4-character secret that identifies you as a player is never sent anywhere.
+1. **It reads the address of that page** to find the game's 8-character public id. If the address contains a player's 12-character link, the extension uses only the first 8 characters, so the 4-character secret that identifies you as a player is never sent anywhere.
 2. **It asks Lichess for the game**, using Lichess's public export at `https://lichess.org/game/export/` followed by the game id. Lichess receives this request as it would from any visitor, and [Lichess's privacy policy](https://lichess.org/privacy) applies to it.
-3. **It opens the game on Chess.com** at `https://www.chess.com/analysis?pgn=…`. The game's PGN is in that address. A PGN is the game record: the moves, the players' Lichess usernames and ratings, the event, the date and the result. Chess.com receives that address, like any page you open, and [Chess.com's privacy policy](https://www.chess.com/legal/privacy) applies to it. The address also appears in your browser history.
+3. **It opens the game on Chess.com** at `https://www.chess.com/analysis?pgn=…`. The game's PGN is in that address. A PGN is the game record: the moves, the time left on each player's clock after each move, the players' Lichess usernames and ratings, the event, the date and the result. Chess.com receives that address, like any page you open, and [Chess.com's privacy policy](https://www.chess.com/legal/privacy) applies to it. The address also appears in your browser history.
 
 The extension sends nothing anywhere else. It makes no other requests to Chess.com and never reads or changes any Chess.com page.
 
