@@ -25,6 +25,8 @@ jobs:
       # validation runs.
       - run: pnpm lint
       - run: pnpm test
+      # The version in package.json has its release notes in CHANGELOG.md.
+      - run: node scripts/release-notes.js > /dev/null
 
   smoke:
     runs-on: ubuntu-24.04
@@ -93,7 +95,8 @@ jobs:
         with:
           name: packages
           path: packages
-      - run: gh release create "$GITHUB_REF_NAME" packages/*.zip --verify-tag --generate-notes
+      - run: node scripts/release-notes.js > release-notes.md
+      - run: gh release create "$GITHUB_REF_NAME" packages/*.zip --verify-tag --notes-file release-notes.md
         env:
           GH_TOKEN: ${{ github.token }}
 
@@ -145,12 +148,15 @@ jobs:
       # `web-ext sign --channel listed` with an unknown GUID silently creates
       # a new listing instead of failing.
       - run: node scripts/check-amo-listing.js firefox/manifest.json
+      # The version's CHANGELOG.md section, as its AMO release notes.
+      - run: node scripts/release-notes.js --amo > amo-metadata.json
       # Submits for review and returns without waiting for approval.
       - run: >-
           pnpm exec web-ext sign
           --channel listed
           --source-dir firefox
           --upload-source-code packages/*-sources.zip
+          --amo-metadata amo-metadata.json
           --approval-timeout 0
           --api-key "$AMO_JWT_ISSUER"
           --api-secret "$AMO_JWT_SECRET"
