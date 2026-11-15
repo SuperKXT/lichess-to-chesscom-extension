@@ -31,7 +31,7 @@ it('exports by the game id alone when the page carries a full id', async () => {
   expect(fetchFn).toHaveBeenCalledOnce();
   const [url, init] = fetchFn.mock.calls[0] ?? [];
   expect(url).toBe(
-    'https://lichess.org/game/export/7WuuzbB4?pgnInJson=true&clocks=false&evals=false',
+    'https://lichess.org/game/export/7WuuzbB4?pgnInJson=true&clocks=true&evals=false',
   );
   expect(JSON.stringify(init)).not.toContain('Zq9x');
 });
@@ -62,6 +62,33 @@ it('refuses an ongoing game', async () => {
   expect(await openOnChessCom('https://lichess.org/7WuuzbB4', fetchFn)).toEqual(
     { kind: 'refused', reason: 'ongoing' },
   );
+});
+
+const clocked = (plies: number) =>
+  Array.from(
+    { length: plies },
+    (_, ply) =>
+      `${String(Math.floor(ply / 2) + 1)}${ply % 2 ? '...' : '.'} Nf3 { [%clk 0:05:00] }`,
+  ).join(' ');
+
+it('keeps the clocks when the game fits with them', async () => {
+  const fetchFn = answering(200, { ...finished, pgn: clocked(100) });
+
+  const outcome = await openOnChessCom('https://lichess.org/7WuuzbB4', fetchFn);
+
+  expect(outcome).toEqual({
+    kind: 'import',
+    url: `https://www.chess.com/analysis?pgn=${encodeURIComponent(clocked(100))}`,
+  });
+});
+
+it('drops the clocks from a game that fits only without them', async () => {
+  const fetchFn = answering(200, { ...finished, pgn: clocked(400) });
+
+  const outcome = await openOnChessCom('https://lichess.org/7WuuzbB4', fetchFn);
+
+  expect(outcome.kind).toBe('import');
+  expect(outcome).not.toHaveProperty('url', expect.stringContaining('clk'));
 });
 
 it('refuses a game too long for the Chess.com URL', async () => {

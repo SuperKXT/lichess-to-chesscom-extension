@@ -1,5 +1,5 @@
 import { chessComImport } from './chesscom';
-import { assessExport, classifyLichessUrl } from './lichess';
+import { assessExport, classifyLichessUrl, withoutClocks } from './lichess';
 import type { GameId } from './lichess';
 import type { ExportError, Refusal } from './refusal';
 
@@ -28,7 +28,12 @@ export async function openOnChessCom(
 
   const assessment = assessExport(response);
   if (assessment.kind !== 'ready') return assessment;
-  return chessComImport(assessment.pgn);
+  // Clocks let Chess.com show each player's clock and the time spent on each
+  // move, but they quadruple the URL. A game too long with them still opens
+  // without them.
+  const withClocks = chessComImport(assessment.pgn);
+  if (withClocks.kind === 'import') return withClocks;
+  return chessComImport(withoutClocks(assessment.pgn));
 }
 
 async function exportGame(
@@ -53,5 +58,5 @@ async function exportGame(
 }
 
 function exportUrl(gameId: GameId): string {
-  return `https://lichess.org/game/export/${gameId}?pgnInJson=true&clocks=false&evals=false`;
+  return `https://lichess.org/game/export/${gameId}?pgnInJson=true&clocks=true&evals=false`;
 }
