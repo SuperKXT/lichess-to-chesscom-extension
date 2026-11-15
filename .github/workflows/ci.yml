@@ -70,7 +70,7 @@ jobs:
             unzip -q /packages/*-firefox.zip -d /shipped
             unzip -q /packages/*-sources.zip -d /src
             cd /src
-            npm install -g pnpm@12.16.1
+            npm install -g pnpm@12.21.0
             pnpm install --frozen-lockfile
             pnpm build:firefox
             diff -r /shipped .output/firefox-mv3
